@@ -11,7 +11,23 @@ process.stdin.setEncoding("utf8");
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Web server started and running at http://localhost:${port}`);
+
+});
+
+process.stdin.on("readable", function () {
+  const dataInput = process.stdin.read();
+  if (dataInput !== null) {
+    const command = dataInput.trim();
+    if (command === "stop") {
+        process.stdout.write("Shutting down the server\n");
+        process.exit(0);
+    } else {
+        process.stdout.write(`Invalid command: ${command}\n`);
+    }
+    process.stdout.write(prompt);
+    process.stdin.resume();
+  }
 });
 
 app.set("views", path.resolve(__dirname, "templates"));
