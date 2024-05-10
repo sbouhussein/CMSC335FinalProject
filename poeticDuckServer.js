@@ -37,4 +37,12 @@ app.get("/", (request, response) => {
     /* Generating the HTML using welcome template */
     response.render("index");
 });
+
+app.get("/findDuck", (request, response) => {
+    response.render("findDuck");
+});
+
+app.post("/findDuck", (request, response) => {
+    let {duckName} = request.body;
+})
  
