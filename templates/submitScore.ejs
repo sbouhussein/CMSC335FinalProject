@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Submit Score</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
 
 
@@ -12,10 +13,10 @@
         <fieldset>
             <label>Name: <input type="text" name="name" id="name" required></label>
             <label>Favorite Poet: <input type="text" name="poet" id="poet" required></label>
-            Score: <%- score %>
+            <label>Score: </label><input type="text" name="score" id="score" disabled><%- score %></input></label>
         </fieldset>
         <br>
-		<input type="submit" value="Submit Score"/>
+		  <input type="submit" value="Submit Score"/>
     </form>
     <hr>
   </body>

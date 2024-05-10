@@ -12,3 +12,17 @@ body {
 #credits {
     font-style: italic;
 }
+
+table, td, th {
+    border: 1px solid gray
+}
+th {
+    color: brown;
+    background-color: antiquewhite;
+    position: sticky;
+}
+
+tbody tr:nth-child(2n - 1) {background-color: antiquewhite;
+     color: brown;}
+tbody tr:nth-child(2n) {background-color: brown;
+    color: antiquewhite;}
