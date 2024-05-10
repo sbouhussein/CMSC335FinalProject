@@ -15,6 +15,8 @@ app.listen(port, () => {
 
 });
 
+app.use(express.static('static'));
+
 process.stdin.on("readable", function () {
   const dataInput = process.stdin.read();
   if (dataInput !== null) {
@@ -40,7 +42,7 @@ app.get("/", (request, response) => {
 
 app.get("/play", (request, response) => {
   /* Generating the HTML using welcome template */
-  response.render("play");
+  response.render("guesser");
 });
 app.get("/guesser", (request, response) => {
   /* Generating the HTML using welcome template */
@@ -51,4 +53,5 @@ app.get("/leaderboard", (request, response) => {
   response.render("leaderboard");
 });
 
- 
+
+
