@@ -6,6 +6,11 @@ const bodyParser = require("body-parser"); /* To handle post parameters */
 const { ejs } = require('ejs');
 const app = express();  /* app is a request handler function */
 
+require("dotenv").config({ path: path.resolve(__dirname, '.env') })
+const uri = process.env.MONGO_CONNECTION_STRING;
+const databaseAndCollection = {db: "CMSC335_DB", collection:"campApplicants"};
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
 /* Important */
 process.stdin.setEncoding("utf8");
 
@@ -50,8 +55,46 @@ app.get("/guesser", (request, response) => {
 });
 app.get("/leaderboard", (request, response) => {
   /* Generating the HTML using welcome template */
-  response.render("leaderboard");
+  
+  async function getLeaderboard(){
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+    try {
+      await client.connect();
+      let res = await lookUpScores(client, databaseAndCollection, 0);
+      let names = [];
+      let poets = [];
+      let scores = [];
+      for (let i of res) { 
+        let {name, poet, score} = i
+        names.push(name)
+        poets.push(poet)
+        scores.push(score)
+      } 
+      tableStr = "<table>\n<tr><th>Name</th><th>Favorite Poet</th><th>Score</th></tr>";
+      for (let i = 0; i < names.length; i++) {
+        tableStr += `<tr><td>${names[i]}</td><td>${poets[i]}</td><td>${scores[i]}</td></tr>`
+      }
+      tableStr += "</table>"
+      response.render("leaderboard", variables)
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await client.close();
+    }
+  }
+  
+  getLeaderboard();
 });
+
+async function lookUpScores(client, databaseAndCollection, min) {
+  let filter = {score : {$gte : min}}
+  const cursor = client.db(databaseAndCollection.db)
+  .collection(databaseAndCollection.collection)
+  .find(filter);
+
+  const result = await cursor.toArray();
+  return result;
+}
 
 
 
