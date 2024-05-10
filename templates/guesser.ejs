@@ -9,14 +9,20 @@
 
 <body onload="getRandomPoem()">
     <h1>Who Wrote This Poem?</h1>
+    <div id="score">
+        Score: 0
+    </div>
 
     <div id="title"></div>
     <div id="lines"></div>
     <br><br>
 
-    
-    <input type="reset">
-	<input type="submit">
+
+    <div id="guessingArea">
+        Guess: <input type="text" id="guess" placeholder="William Shakespeare">
+        <input type="button" id="hintButton" value="Show Hint">
+        <input type="button" id="submit" value="Submit Guess">
+    </div>
     <hr>
     <p>
         Created by Sami Bouhusein and Ethan Ewing
@@ -27,62 +33,106 @@
 
 <script>
 
+    let total = 0
     class Poem {
-    name;
-    lines;
-    author;
+        name;
+        lines;
+        author;
 
-    constructor(name, lines, author) {
-        this.name = name;
-        this.lines = lines;
-        this.author = author;
+        constructor(name, lines, author) {
+            this.name = name;
+            this.lines = lines;
+            this.author = author;
+        }
+
+        fillPoem = () => {
+
+        }
+
+        getName = () => {
+            return this.name;
+        };
+
+        getLines = () => {
+            return this.lines;
+        };
+
+        getAuthor = () => {
+            return this.lines;
+        };
+
+        isAuthor = (guess) => {
+            return String(this.author).toUpperCase() === String(guess).toUpperCase();
+        };
+        
+    }
+    let shown = false
+    document.querySelector("#submit").onclick = checkAnswer;
+    // document.querySelector("#playAgain").onclick = playAgain;
+    // document.querySelector("#submitScore").onclick = submitScores;
+
+
+    function playAgain(){
+        console.log("It seems you would like to play again")
     }
 
-    fillPoem = () => {
-
+    function submitScores(){
+        console.log("Come on you didn't do THAT well")
     }
 
-    getName = () => {
-        return this.name;
-    };
 
-    getLines = () => {
-        return this.lines;
-    };
-
-    getAuthor = () => {
-        return this.lines;
-    };
-
-
-    isAuthor = (guess) => {
-        return this.author.toUpperCase() == guess.toUpperCase()
-    };
-
+    if (!shown) {
+        hintButton.onclick = showHint
+        shown = true
+    }
     
-    }
-    window.onsubmit = checkAnswer;
+    let poem = new Poem()
 
     function getRandomPoem() {
         let poemUrl = `https://poetrydb.org/random`;
         fetch(poemUrl)
-          .then(response => response.json())
-          .then(json => {
-            const title = json[0].title;
-            const author = json[0].author;
-            const lines = json[0].lines;
-            let poem = new Poem(title, lines, author)
-            const titleDisp = document.querySelector("#title");
-            const linesDisp = document.querySelector("#lines");
-            titleDisp.innerHTML = `<h3>${title}<h3>`
-            let linesFormatted = lines.join('<br>');
-            linesDisp.innerHTML = `${linesFormatted}`
-            
-          });
+            .then(response => response.json())
+            .then(json => {
+                const title = json[0].title;
+                const author = json[0].author;
+                const lines = json[0].lines;
+                console.log(`Hey you're cheating - don't tell anyone but the author is ${author}`)
+                poem = new Poem(title, lines, author)
+                const titleDisp = document.querySelector("#title");
+                titleDisp.innerHTML = `<h2>Poem Title: <em>${title}</em><h3>`
+            });
+    }
+
+    function showHint() {
+        const linesDisp = document.querySelector("#lines");
+        let linesFormatted = poem.getLines().join('<br>');
+        linesDisp.innerHTML = `${linesFormatted}`
     }
 
     function checkAnswer() {
-        
+        const guess = document.querySelector("#guess").value; 
+        const scoreDisp = document.querySelector("#score");
+        if (poem.isAuthor(guess)) {
+            total += 1;
+            scoreDisp.innerHTML = `Score: ${total}`;
+            document.querySelector("#guess").value = "";
+            document.querySelector("#lines").innerHTML = ""
+            shown = false         
+
+        } else {
+            const titleDisp = document.querySelector("#title");
+            const linesDisp = document.querySelector("#lines");
+            const guessArea = document.querySelector("#guessingArea");
+            titleDisp.innerHTML = `<h3>Incorrect<h3>`
+            linesDisp.innerHTML = `The correct response was ${poem.author}`
+            guessArea.innerHTML = `You got ${total} in a row correct<br><br> <input type="button" id="submitScore" value="Submit Your Score" onclick="submitScores()">
+            <input type="button" id="playAgain" value="Play Again" onclick="playAgain()">`;
+            return
+        }
+        console.log(`Guessed: ${guess}`);
+        console.log(`Correct Response: ${poem.author}`);
+
+        getRandomPoem();
     }
 
 
