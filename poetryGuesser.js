@@ -49,6 +49,13 @@ app.get("/play", (request, response) => {
   /* Generating the HTML using welcome template */
   response.render("guesser");
 });
+
+app.get("/submit", (request, response) => {
+  /* Generating the HTML using welcome template */
+  const variables = { score: request.query.score}
+  response.render("submitScore", variables);
+});
+
 app.get("/guesser", (request, response) => {
   /* Generating the HTML using welcome template */
   response.render("guesser");

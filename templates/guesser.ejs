@@ -76,9 +76,9 @@
         console.log("It seems you would like to play again")
     }
 
-    function submitScores(){
-        console.log("Come on you didn't do THAT well")
-    }
+    // function submitScores(){
+    //     console.log("Come on you didn't do THAT well")
+    // }
 
 
     if (!shown) {
@@ -123,10 +123,11 @@
             const titleDisp = document.querySelector("#title");
             const linesDisp = document.querySelector("#lines");
             const guessArea = document.querySelector("#guessingArea");
-            titleDisp.innerHTML = `<h3>Incorrect<h3>`
-            linesDisp.innerHTML = `The correct response was ${poem.author}`
-            guessArea.innerHTML = `You got ${total} in a row correct<br><br> <input type="button" id="submitScore" value="Submit Your Score" onclick="submitScores()">
-            <input type="button" id="playAgain" value="Play Again" onclick="playAgain()">`;
+            titleDisp.innerHTML = `<h3>Incorrect<h3>`;
+            linesDisp.innerHTML = `The correct response was ${poem.author}`;
+            let uri = `"submit?score=${total}"`;
+            guessArea.innerHTML = `You got ${total} in a row correct<br><br> <form action=${uri} method="get"><input type="submit" value="Submit Your Score">
+            <input type="button" id="playAgain" value="Play Again" onclick="playAgain()"></form>`;
             return
         }
         console.log(`Guessed: ${guess}`);
