@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body onload="getRandomPoem()">
     <h1>Who Wrote This Poem?</h1>
 
     <div id="title"></div>
@@ -26,7 +26,60 @@
 </html>
 
 <script>
+
+    class Poem {
+    name;
+    lines;
+    author;
+
+    constructor(name, lines, author) {
+        this.name = name;
+        this.lines = lines;
+        this.author = author;
+    }
+
+    fillPoem = () => {
+
+    }
+
+    getName = () => {
+        return this.name;
+    };
+
+    getLines = () => {
+        return this.lines;
+    };
+
+    getAuthor = () => {
+        return this.lines;
+    };
+
+
+    isAuthor = (guess) => {
+        return this.author.toUpperCase() == guess.toUpperCase()
+    };
+
+    
+    }
     window.onsubmit = checkAnswer;
+
+    function getRandomPoem() {
+        let poemUrl = `https://poetrydb.org/random`;
+        fetch(poemUrl)
+          .then(response => response.json())
+          .then(json => {
+            const title = json[0].title;
+            const author = json[0].author;
+            const lines = json[0].lines;
+            let poem = new Poem(title, lines, author)
+            const titleDisp = document.querySelector("#title");
+            const linesDisp = document.querySelector("#lines");
+            titleDisp.innerHTML = `<h3>${title}<h3>`
+            let linesFormatted = lines.join('<br>');
+            linesDisp.innerHTML = `${linesFormatted}`
+            
+          });
+    }
 
     function checkAnswer() {
 
