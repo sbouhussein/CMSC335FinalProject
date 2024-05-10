@@ -3,8 +3,10 @@ html {
 }
 
 body {
-    border: 1rem solid red;
+    border: 0.5rem solid brown;
+    border-style: groove;
     padding: 1rem;
+    background-color: antiquewhite;
 }
 
 #credits {
