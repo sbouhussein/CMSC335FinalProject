@@ -50,9 +50,9 @@ app.get("/play", (request, response) => {
   response.render("guesser");
 });
 
-app.get("/submit", (request, response) => {
+app.post("/submit/:score", (request, response) => {
   /* Generating the HTML using welcome template */
-  const variables = { score: request.query.score}
+  const variables = { score: request.params.score}
   response.render("submitScore", variables);
 });
 
