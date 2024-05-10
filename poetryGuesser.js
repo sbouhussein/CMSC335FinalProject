@@ -68,18 +68,21 @@ app.get("/leaderboard", (request, response) => {
     try {
       await client.connect();
       let res = await lookUpScores(client, databaseAndCollection);
-      let names = [];
-      let poets = [];
-      let scores = [];
-      for (let i of res) { 
-        let {name, poet, score} = i
-        names.push(name)
-        poets.push(poet)
-        scores.push(score)
-      } 
+
+      function compareByScore(a, b) {
+        if (a.score < b.score) {
+          return 1;
+        }
+        if (a.score > b.score) {
+          return -1;
+        }
+        return 0;
+      }
+      res.sort(compareByScore)
+
       tableStr = "<table>\n<tr><th>Name</th><th>Favorite Poet</th><th>Score</th></tr>";
-      for (let i = 0; i < names.length; i++) {
-        tableStr += `<tr><td>${names[i]}</td><td>${poets[i]}</td><td>${scores[i]}</td></tr>`
+      for (let i of res) {
+        tableStr += `<tr><td>${i.name}</td><td>${i.poet}</td><td>${i.score}</td></tr>`
       }
       tableStr += "</table>"
       const variables = {
