@@ -56,6 +56,31 @@ app.get("/submit", (request, response) => {
   response.render("submitScore", variables);
 });
 
+app.post("/submit", (request, response) => {
+  let {name, poet, score} = request.body;
+  let variables = {
+    name : name,
+    poet : poet,
+    score : score
+  }
+
+  async function useInsert() {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        try {
+            await client.connect();
+            const result = await client.db(databaseAndCollection.db).collection(databaseAndCollection.collection).insertOne(variables);
+
+        } catch (e) {
+            console.error(e);
+        } finally {
+            await client.close();
+        }
+  }
+
+  useInsert();
+  response.render("postSubmit")
+});
+
 app.get("/guesser", (request, response) => {
   /* Generating the HTML using welcome template */
   response.render("guesser");
