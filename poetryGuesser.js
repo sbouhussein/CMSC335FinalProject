@@ -8,7 +8,7 @@ const app = express();  /* app is a request handler function */
 
 require("dotenv").config({ path: path.resolve(__dirname, '.env') })
 const uri = process.env.MONGO_CONNECTION_STRING;
-const databaseAndCollection = {db: "CMSC335_DB", collection:"campApplicants"};
+const databaseAndCollection = {db: "Poetry_DB", collection:"users"};
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 /* Important */
@@ -60,7 +60,7 @@ app.get("/leaderboard", (request, response) => {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
       await client.connect();
-      let res = await lookUpScores(client, databaseAndCollection, 0);
+      let res = await lookUpScores(client, databaseAndCollection);
       let names = [];
       let poets = [];
       let scores = [];
@@ -75,6 +75,9 @@ app.get("/leaderboard", (request, response) => {
         tableStr += `<tr><td>${names[i]}</td><td>${poets[i]}</td><td>${scores[i]}</td></tr>`
       }
       tableStr += "</table>"
+      const variables = {
+        tableHTML : tableStr
+      }
       response.render("leaderboard", variables)
     } catch (e) {
         console.error(e);
@@ -86,8 +89,8 @@ app.get("/leaderboard", (request, response) => {
   getLeaderboard();
 });
 
-async function lookUpScores(client, databaseAndCollection, min) {
-  let filter = {score : {$gte : min}}
+async function lookUpScores(client, databaseAndCollection) {
+  let filter = {}
   const cursor = client.db(databaseAndCollection.db)
   .collection(databaseAndCollection.collection)
   .find(filter);
