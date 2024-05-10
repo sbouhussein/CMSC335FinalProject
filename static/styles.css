@@ -1,0 +1,12 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    border: 1rem solid red;
+    padding: 1rem;
+}
+
+#credits {
+    font-style: italic;
+}
