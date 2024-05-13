@@ -115,10 +115,10 @@ app.get("/leaderboard", (request, response) => {
       let res = await lookUpScores(client, databaseAndCollection);
 
       function compareByScore(a, b) {
-        if (a.score < b.score) {
+        if (Number(a.score) < Number(b.score)) {
           return 1;
         }
-        if (a.score > b.score) {
+        if (Number(a.score) > Number(b.score)) {
           return -1;
         }
         return 0;
