@@ -8,6 +8,13 @@
 </head>
 
 <body onload="getRandomPoem()">
+    <h1>Enter your information</h1>
+    <div id="userInfo">
+        <form>
+            <label>Name: <input type="text" id="name"></label><br>
+            <label>Favorite Poet: <input type="text" id="poet"></label>
+        </form>
+    </div>
     <h1>Who Wrote This Poem?</h1>
     <div id="score">
         Score: 0
@@ -24,6 +31,8 @@
         <input type="button" id="submit" value="Submit Guess" onclick="checkAnswer()">
     </div>
     <hr>
+    <a href="/">Return to home page</a>
+    <br>
     <p id="credits">
         Created by Sami Bouhusein and Ethan Ewing
     </p>
@@ -124,9 +133,11 @@
             const titleDisp = document.querySelector("#title");
             const linesDisp = document.querySelector("#lines");
             const guessArea = document.querySelector("#guessingArea");
+            const name = document.getElementById("name").value;
+            const poet = document.getElementById("poet").value;
             titleDisp.innerHTML = `<h3>Incorrect<h3>`;
             linesDisp.innerHTML = `The correct response was ${poem.author}`;
-            guessArea.innerHTML = `You got ${total} in a row correct<br><br> <form action="submit/${total}" method="post"><input type="submit" value="Submit Your Score">
+            guessArea.innerHTML = `You got ${total} in a row correct<br><br> <form action="submit/${name}/${poet}/${total}" method="post"></label><input type="submit" value="Submit Your Score">
             <input type="button" value="Play Again" onclick="playAgain()"></form>`;
             return
         }

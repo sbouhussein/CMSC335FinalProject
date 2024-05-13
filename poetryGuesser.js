@@ -50,13 +50,33 @@ app.get("/play", (request, response) => {
   response.render("guesser");
 });
 
-app.post("/submit/:score", (request, response) => {
+app.post("/submit/:name/:poet/:score", (request, response) => {
   /* Generating the HTML using welcome template */
-  const variables = { score: request.params.score}
-  response.render("submitScore", variables);
+
+  let variables = {
+    name : request.params.name,
+    poet : request.params.poet,
+    score : request.params.score
+  }
+
+  async function useInsert() {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        try {
+            await client.connect();
+            const result = await client.db(databaseAndCollection.db).collection(databaseAndCollection.collection).insertOne(variables);
+
+        } catch (e) {
+            console.error(e);
+        } finally {
+            await client.close();
+        }
+  }
+
+  useInsert();
+  response.render("postSubmit", variables);
 });
 
-app.post("/submit", (request, response) => {
+app.post("/postSubmit", (request, response) => {
   let {name, poet, score} = request.body;
   let variables = {
     name : name,
